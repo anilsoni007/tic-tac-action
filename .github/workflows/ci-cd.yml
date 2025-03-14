@@ -78,6 +78,8 @@ jobs:
   Docker-Build:
     needs: unit-testing
     runs-on: ubuntu-latest
+    env:
+      IMAGE: 'tic-tac'
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -99,8 +101,8 @@ jobs:
 
       - name: build image and push
         run: |
-         docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ github.repository }}:${{ github.sha }} .
-         docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ github.repository }}:${{ github.sha }}
+         docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE  }}:${{ github.sha }} .
+         docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE }}:${{ github.sha }}
          if [ $? -eq 0 ]; then
             echo "image pushed successfully!!"
           else 
