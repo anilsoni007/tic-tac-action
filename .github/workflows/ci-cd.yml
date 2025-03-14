@@ -33,6 +33,7 @@ jobs:
           retention-days: 7
 
   Static-Analysis:
+    needs: build-job
     runs-on: ubuntu-latest
     steps:
       - name: Check out Git repository
@@ -42,14 +43,38 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 22
-          
+
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
+      - name: Run ESLint
+        run: npm run lint
+  
+  unit-testing:
+    needs: Static-Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
-          eslint: true
-          prettier: true
+          node-version: 22
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: run test
+        run: |
+          npm test
+          if [ $? -eq 0 ]; then
+            echo "Test is passed!!"
+          else 
+            echo "Test is failed!!!"
+            exit 1
+          fi
+             
+      
 
       
