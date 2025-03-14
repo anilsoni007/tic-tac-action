@@ -103,12 +103,7 @@ jobs:
         run: |
          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE  }}:${{ github.sha }} .
          docker push ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE }}:${{ github.sha }}
-         if [ $? -eq 0 ]; then
-            echo "image pushed successfully!!"
-          else 
-            echo "build and push docker image step failed!!!"
-            exit 1
-          fi
+         
 
 
              
